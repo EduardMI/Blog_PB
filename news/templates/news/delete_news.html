@@ -1,0 +1,26 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="{% static 'assets/css/news.css' %}" rel="stylesheet">
+{% endblock css %}
+
+
+ {% block content %}
+     <h1 align="center">Удаление новости</h1>
+     <br>
+
+     <form method="post" enctype="multipart/form-data">
+         {%  csrf_token %}
+         <div align="center">
+             <h4>Вы хотите удалить новость?</h4>
+          <button class="btn btn-success" type="submit">Удалить новость</button>
+         </div>
+
+         <br>
+     </form>
+        <br>
+ {% endblock content %}

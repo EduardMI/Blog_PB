@@ -1,0 +1,62 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<!--    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"-->
+<!--          id="bootstrap-css">-->
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+
+
+{% block content %}
+    {% if news %}
+        <div id="blog" class="blog">
+        <div class="container" data-aos="fade-up">
+            <div class="row">
+
+                <div class="col-lg-12 entries">
+                    {% for data in news %}
+                        <article class="entry">
+                            <div class="entry-img">
+                                {% if data.image %}
+                                <img src="{{ data.image.url }}" alt="" class="img-fluid" width="100%">
+                                {% endif %}
+                            </div>
+
+                            <h2 class="entry-title">
+                                <a href="{% url 'news:news_detail' data.id %}">{{ data.title }}</a>
+                            </h2>
+
+                            <div class="entry-meta">
+                                <ul>
+                                    <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
+                                            href="{% url 'auth:profile' data.author.pk %}">{{ data.author }}</a></li>
+                                    <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
+                                            href="{% url 'news:news_detail' data.id %}">{{ data.date }}</a></li>
+                                    {#<li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a>#}
+                                    {#href="{% url 'news:news_detail' data.id %}">12 Comments</a></li>#}
+                                </ul>
+                            </div>
+
+                            <div class="entry-content">
+                                <p>
+                                    {{ data.anons }}
+                                </p>
+                                <div class="read-more">
+                                    <a href="{% url 'news:news_detail' data.id %}">Читать далее</a>
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        </div>
+    {% else %}
+        <h2 align="center">Новостной блок пуст</h2>
+    {% endif %}
+
+{% endblock %}

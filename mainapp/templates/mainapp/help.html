@@ -1,0 +1,109 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'assets/css/help_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+    <table style="background: #000000;" cellpadding="0" cellspacing="0" id="demo_navi">
+    </table>
+    <br><br><br>
+    <section class="cd-faq">
+        <ul class="cd-faq-categories">
+            <li><a class="selected" href="#basics">Общее</a></li>
+            <li><a href="#account">Аккаунт</a></li>
+            <li><a href="#article">Статьи</a></li>
+            <li><a href="#news">Новости</a></li>
+        </ul> <!-- cd-faq-categories -->
+
+        <div class="cd-faq-items">
+            <ul id="basics" class="cd-faq-group">
+                <li class="cd-faq-title"><h2>Общее</h2></li>
+                <li>
+                    <a class="cd-faq-trigger" href="#0">Как зарегистрироватся на сайте?</a>
+                    <div class="cd-faq-content">
+                        <p>Для небходимо нажать кнопку войти в правом верхнем углу</p>
+                    </div> <!-- cd-faq-content -->
+                </li>
+                <li>
+                    <a class="cd-faq-trigger" href="#0">Какие способы регистрации имеются на сайте?</a>
+                    <div class="cd-faq-content">
+                        <p>На сайте можно зарегистрироватся с помощью электроной почты либо войти спомощью google
+                            акаунта</p>
+                    </div> <!-- cd-faq-content -->
+                </li>
+                <li>
+                    <a class="cd-faq-trigger" href="#0">Могу ли я создать статью не зарегистрировавшись на сайте?</a>
+                    <div class="cd-faq-content">
+                        <p>Нет не зарегистрированный пользователь может только просматривать статьи</p>
+                    </div> <!-- cd-faq-content -->
+                </li>
+
+
+                <ul id="account" class="cd-faq-group">
+                    <li class="cd-faq-title"><h2>Аккаунт</h2></li>
+                    <li>
+                        <a class="cd-faq-trigger" href="#0">Как добавить аватарку?</a>
+                        <div class="cd-faq-content">
+                            <p>Добавить аватарку можно на странице профиля</p>
+                        </div> <!-- cd-faq-content -->
+                    </li>
+
+                    <li>
+                        <a class="cd-faq-trigger" href="#0">Как редактировать аккаунт?</a>
+                        <div class="cd-faq-content">
+                            <p>В верхнем меню имеется ссылка с имением профиля при нажатие выпадает меню где можно
+                                перейти в личный кабинет по ссылке "профиль" </p>
+                        </div> <!-- cd-faq-content -->
+                    </li>
+
+
+                    <ul id="article" class="cd-faq-group">
+                        <li class="cd-faq-title"><h2>Статьи</h2></li>
+                        <li>
+                            <a class="cd-faq-trigger" href="#0">Могу ли я опобликовать статью без отправки на
+                                модерацию?</a>
+                            <div class="cd-faq-content">
+                                <p>Нет все статьи проходять проверку модерацию</p>
+                            </div> <!-- cd-faq-content -->
+                        </li>
+
+                        <li>
+                            <a class="cd-faq-trigger" href="#0">Как изменить созданную статью?</a>
+                            <div class="cd-faq-content">
+                                <p>В разделе "Все мои статьи" можно выбрать интересующую статью для редактирования </p>
+                            </div> <!-- cd-faq-content -->
+                        </li>
+
+                        <li>
+                            <a class="cd-faq-trigger" href="#0">Как посмотреть список моих статей?</a>
+                            <div class="cd-faq-content">
+                                <p>В разделе "Все мои статьи" из выпадающего меню с именем профиля </p>
+                            </div> <!-- cd-faq-content -->
+                        </li>
+
+                        <li>
+                            <a class="cd-faq-trigger" href="#0">Могу ли я добавить картинки в сатью?</a>
+                            <div class="cd-faq-content">
+                                <p>Да в редакторе статьи имеется такая возможность </p>
+                            </div> <!-- cd-faq-content -->
+                        </li>
+
+
+                        <ul id="news" class="cd-faq-group">
+                            <li class="cd-faq-title"><h2>Новости</h2></li>
+                            <li>
+                                <a class="cd-faq-trigger" href="#0">Могу ли я добавить новость в раздел новости ?</a>
+                                <div class="cd-faq-content">
+                                    <p> Нет раздел новостей заполняют модераторы сайта</p>
+                                </div> <!-- cd-faq-content -->
+                            </li>
+                        </ul> <!-- cd-faq-group -->
+        </div> <!-- cd-faq-items -->
+    </section>
+{% endblock content %}
+
+{% block js %}
+    <script src="{% static 'assets/js/help.js' %}"></script>
+{% endblock %}

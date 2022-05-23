@@ -1,0 +1,36 @@
+.items-wrapper {
+    min-height: 100vh;
+    padding: 1em 1em;
+}
+.item-block {
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 10px;
+    min-height: 100px;
+}
+.mar-b-5 {
+    margin-bottom: 5px;
+}
+
+.m-b20-r10 {
+    margin-bottom: 20px;
+    margin-right: 10px;
+}
+.d-b {
+    display: block;
+}
+.is-deleted {
+    opacity: 0.5;
+    background-color: #d1d5de;
+}
+
+.avatar {
+  display: inline-block;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}

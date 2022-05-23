@@ -1,0 +1,27 @@
+{% load static %}
+<!-- ======= Top Bar ======= -->
+<section id="topbar" class="d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7 contact-info d-flex">
+                <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@python_band.com">contact@python_band.com</a></i>
+                <i class="bi bi-phone d-flex align-items-center ms-4"><span>+7 912 345 67 89</span></i>
+            </div>
+            <div class="col-md-5 search-form d-flex justify-content-end pt-3 pt-md-0">
+                <form method="POST" action="{% url 'search:search' %}">
+                    {% csrf_token %}
+                    <div class="search-input-wrapper">
+                        <input type="search"
+                               placeholder="Найти..."
+                               aria-label="Search"
+                               name="searched"
+                   style="border: 0px;">
+                    </div>
+                    <button type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

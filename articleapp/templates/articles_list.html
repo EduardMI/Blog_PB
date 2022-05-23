@@ -1,0 +1,59 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+
+    <section id="blog" class="blog">
+        <div class="container">
+
+            {% for article in object_list %}
+                <article class="entry">
+                    <h2 class="entry-title">
+                        <a href="{% url 'article:detail' article.pk %}">{{ article.title }}</a>
+                    </h2>
+                    <div class="entry-meta">
+                        <ul>
+                            <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a
+                                    href="{% url 'auth:profile' article.author.pk %}">{{ article.author }}</a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a
+                                    href="{% url 'article:detail' article.pk %}">
+                                {% if article.publication_date %}
+                                <time datetime="2020-01-01">{{ article.publication_date }}</time>
+                                {% else %}
+                                <time datetime="2020-01-01">{{ article.created }}</time>
+                                {% endif %}
+                            </a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a
+                                    href="{% url 'article:detail' article.pk %}">Комментариев: {{ article.comments_articles.all.count }}</a>
+                            </li>
+                            <li class="d-flex align-items-center"><i class="bi bi-hand-thumbs-up"></i> <a
+                                    href="{% url 'article:detail' article.pk %}">{{ article.liked.all.count }}</a>
+                            </li>
+                            <li class="d-flex align-items-center"><i class="bi bi-bar-chart"></i> <a
+                                    href="{% url 'article:detail' article.pk %}">Рейтинг: {{ article.rating }}</a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="entry-content">
+                        <p>
+                            {{ article.content | safe | truncatechars_html:500 }}
+                        </p>
+                        <div class="read-more">
+                            <a href="{% url 'article:detail' article.pk %}">Дальше</a>
+                        </div>
+                    </div>
+
+                </article>
+                <!-- End blog entry -->
+            {% endfor %}
+            {% include "paginator.html" %}
+
+        </div>
+    </section><!-- End Blog Section -->
+{% endblock content %}

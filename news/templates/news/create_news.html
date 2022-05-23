@@ -1,0 +1,40 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+{#    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">#}
+    <link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+
+{% block content %}
+    <div class="container items-wrapper overflow-auto h-auto">
+        <div class="row">
+            <div class="col-sm-12 d-flex justify-content-end ">
+                <a href="{% url 'news:main' %}" class="btn btn-outline-secondary m-b20-r10">
+                    К списку новостей
+                </a>
+            </div>
+        </div>
+        <div class="container items-wrapper overflow-auto h-auto">
+            <div class="item-block shadow row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-9">
+                    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.media | safe}}
+                        {{ form.as_p }}
+                        <input class="btn btn-outline-secondary" type="submit" value="Создать">
+                    </form>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+</div>
+{% endblock content %}
+
+
+

@@ -1,0 +1,66 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/">Главная</a></li>
+          <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+          <li>Новости</li>
+        </ol>
+        <h2>Новости</h2>
+
+      </div>
+</section>
+<div class="container items-wrapper overflow-auto h-auto">
+    <div class="row">
+        <div class="col-sm-12 d-flex justify-content-end ">
+            <a href="{% url '_admin:news_create' %}" class="btn btn-outline-secondary m-b20-r10">
+                Создать новость
+            </a>
+        </div>
+    </div>
+    {% for news in objects %}
+        <div class="item-block shadow row {% if news.status == 'DT' %} is-deleted {% endif %}">
+            <div class="col-sm-10 row">
+                <div class="col-sm-1">{{ forloop.counter }}</div>
+                <div class="col-sm-9"><span>{{ news.title }}</span></div>
+                <div class="col-sm-2">
+                    <a href="{% url 'news:news_detail' news.pk %}" target="_blank"
+                       class="btn btn-outline-secondary">К новости</a>
+                </div>
+                <div class="w-100 d-none d-md-block"></div>
+                <div class="col-sm-3">
+                    <span>
+                        Автор: <a href="{% url 'auth:profile' news.author.pk %}" target="_blank">
+                        {{ news.author }}</a>
+                    </span>
+                </div>
+                <div class="col-sm-3"><span>Статус: {{ news.get_status_display }}</span></div>
+            </div>
+            <div class="col-sm-2 row-cols-2">
+
+                    <div class="col-sm-12 mar-b-5">
+                        <a href="{% url '_admin:news_update' news.pk %}"
+                            class="btn btn-outline-secondary btn-block align-items-start d-b">edit</a>
+                    </div>
+
+                <div class="col-sm-12">
+                    <form method="POST" action="{% url '_admin:news_delete' news.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit" value="{% if news.status != 'DT' %} del {% else %} restore {% endif %}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% include 'adminapp/includes/pagination.html' %}
+</div>
+{% endblock content %}

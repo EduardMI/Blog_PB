@@ -1,0 +1,120 @@
+        {% if item.type_notify == 'L' %}
+            <div class="row {% if item.is_read %}is-read{% endif %}" style="margin-bottom:10px">
+                <p>{{ item.created }}</p>
+                <div class="col-sm-10">
+                    <span>Пользователь <a href="{% url 'auth:profile' item.from_user.pk %}">{{ item.from_user }}</a>
+                    поставил лайк вашей статье: <a href="{% url 'article:detail' item.article.pk %}">{{ item.article }}</a>
+                    </span>
+                </div>
+                {% if not item.is_read %}
+                <div class="col-sm-2">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'notify:notify_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               type="submit" value="Прочитано">
+                    </form>
+                </div>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endif %}
+
+        {% if item.type_notify == 'R' %}
+            <div class="row {% if item.is_read %}is-read{% endif %}" style="margin-bottom:10px">
+                <p>{{ item.created }}</p>
+                <div class="col-sm-10">
+                    <span>Пользователь <a href="{% url 'auth:profile' item.from_user.pk %}">{{ item.from_user }}</a>
+                        убрал свой лайк с вашей статьи:
+                        <a href="{% url 'article:detail' item.article.pk %}">{{ item.article }}</a></span>
+                </div>
+                {% if not item.is_read %}
+                <div class="col-sm-2">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'notify:notify_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               type="submit" value="Прочитано">
+                    </form>
+                </div>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endif %}
+
+        {% if item.type_notify == 'C' %}
+            <div class="row {% if item.is_read %}is-read{% endif %}" style="margin-bottom:10px">
+                <p>{{ item.created }}</p>
+                <div class="col-sm-10">
+                    <span>Пользователь <a href="{% url 'auth:profile' item.from_user.pk %}"> {{ item.from_user }}</a>
+                        прокомментировал вашу статью:
+                        <a href="{% url 'article:detail' item.article.pk %}"> {{ item.article }}</a></span>
+                </div>
+                {% if not item.is_read %}
+                <div class="col-sm-2">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'notify:notify_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               type="submit" value="Прочитано">
+                    </form>
+                </div>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endif %}
+
+        {% if item.type_notify == 'B' %}
+            <div class="row {% if item.is_read %}is-read{% endif %}" style="margin-bottom:10px">
+                <p>{{ item.created }}</p>
+                <div class="col-sm-10">
+                    <span>Вы заблокированы до {{ item.user_to.is_block }}</span>
+                </div>
+                {% if not item.is_read %}
+                <div class="col-sm-2">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'notify:notify_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               type="submit" value="Прочитано">
+                    </form>
+                </div>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endif %}
+
+        {% if item.type_notify == 'U' %}
+            <div class="row {% if item.is_read %}is-read{% endif %}" style="margin-bottom:10px">
+                <p>{{ item.created }}</p>
+                <div class="col-sm-10">
+                    <span>Вы разблокированы!!!</span>
+                </div>
+                {% if not item.is_read %}
+                <div class="col-sm-2">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'notify:notify_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               type="submit" value="Прочитано">
+                    </form>
+                </div>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endif %}
+
+        {% if item.type_notify == 'A' %}
+            <div class="row {% if item.is_read %}is-read{% endif %}" style="margin-bottom:10px">
+                <p>{{ item.created }}</p>
+                <div class="col-sm-10">
+                    <span>Ваша статья: <a href="{% url 'article:detail' item.article.pk %}"> {{ item.article }} </a>
+                    опубликована!!!</span>
+                </div>
+                {% if not item.is_read %}
+                <div class="col-sm-2">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'notify:notify_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               type="submit" value="Прочитано">
+                    </form>
+                </div>
+                {% endif %}
+                <hr/>
+            </div>
+        {% endif %}

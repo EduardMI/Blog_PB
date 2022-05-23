@@ -1,0 +1,49 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section id="blog" class="blog">
+    <div class="container">
+        <div class="article-edit-form">
+
+            <div class="post-entry">
+                <h2>{{ article.title }}</h2>
+                <p>{{ article.author }}</p>
+                <p>{{ article.category }}</p>
+                <p>{{ article.content | safe }}</p>
+
+            </div>
+            <div class="row align-items-end">
+                <div class="col-sm-2">
+                    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                        {{ form.as_p }}
+                        <input class="btn btn-outline-secondary" type="submit" value="Опубликовать">
+                        </div>
+                    </form>
+                </div>
+                {% if request.user.role == 'A' or request.user.is_superuser %}
+                    <div class="col-sm-2">
+                        <form method="get" action="{% url '_admin:article_update' article.pk %}">
+                            {% csrf_token %}
+
+                            <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit" value="Редактировать">
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="col-sm-2">
+                    <form method="POST" action="{% url '_admin:article_delete' article.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit"
+                               value="{% if article.status != 'DT' %} Удалить {% else %} restore {% endif %}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% if page_obj.has_other_pages %}
+<section id="blog" class="blog">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 entries">
+                <div class="blog-pagination">
+                    <ul class="justify-content-center">
+                        {% for pn in page_obj.paginator.page_range %}
+                        {% if page_obj.number == pn %}
+                        <li class="active"><a href="#">{{ pn }}</a></li>
+                        {% else %}
+                        <li><a href="?page={{ pn }}">{{ pn }}</a></li>
+                        {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}

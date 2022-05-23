@@ -1,0 +1,78 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/">Главная</a></li>
+          <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+          <li>Статьи</li>
+        </ol>
+        <h2>Статьи</h2>
+
+      </div>
+</section>
+<div class="container items-wrapper overflow-auto h-auto">
+    <div class="row">
+        <div class="col-sm-12 d-flex justify-content-end ">
+            <a href="{% url '_admin:article_create' %}" class="btn btn-outline-secondary m-b20-r10">
+                Создать статью
+            </a>
+        </div>
+    </div>
+    {% for article in objects %}
+        <div class="item-block shadow row {% if article.status == 'DT' %} is-deleted {% endif %}">
+            <div class="col-sm-10 row">
+                <div class="col-sm-1">{{ forloop.counter }}</div>
+                <div class="col-sm-9"><span>{{ article.title }}</span></div>
+                <div class="col-sm-2">
+                    <a href="{% url 'article:detail' article.pk %}" target="_blank"
+                       class="btn btn-outline-secondary">К статье</a>
+                </div>
+                <div class="w-100 d-none d-md-block"></div>
+                <div class="col-sm-4"><span>Категория: {{ article.category }}</span></div>
+                <div class="col-sm-3">
+                    <span>
+                        автор: <a href="{% url 'auth:profile' article.author.pk %}" target="_blank">
+                        {{ article.author }}</a>
+                    </span>
+                </div>
+                <div class="col-sm-3"><span>Статус: {{ article.get_status_display }}</span></div>
+                {% if article.approve == True %}
+                    <div class="col-sm-3">
+                        <span>Модерация: ОДОБРЕНО</span></div>
+                {% else %}
+                    <div class="col-sm-3">
+                        <span>Модерация: НЕ ОДОБРЕНО</span></div>
+                {% endif %}
+            </div>
+            <div class="col-sm-2 row-cols-2">
+                {% if request.user.role == 'A' or request.user.is_superuser %}
+                    <div class="col-sm-12 mar-b-5">
+                        <a href="{% url '_admin:article_update' article.pk %}"
+                            class="btn btn-outline-secondary btn-block align-items-start d-b">Редактировать</a>
+                    </div>
+                {% endif %}
+                <div class="col-sm-12">
+<!--                    <a href="{% url '_admin:article_delete' article.pk %}"-->
+<!--                       class="btn btn-outline-secondary btn-block align-items-end d-b">-->
+<!--                        {% if article.status != 'DT' %} del {% else %} restore {% endif %}</a>-->
+                    <form method="POST" action="{% url '_admin:article_delete' article.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit"
+                               value="{% if article.status != 'DT' %} Удалить {% else %} restore {% endif %}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% include 'adminapp/includes/pagination.html' %}
+</div>
+{% endblock content %}

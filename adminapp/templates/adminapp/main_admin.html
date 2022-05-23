@@ -1,0 +1,90 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/">Главная</a></li>
+          <li>Админка</li>
+        </ol>
+        <h2>Админка</h2>
+
+      </div>
+    </section>
+
+<section id="services" class="services">
+      <div class="container items-wrapper">
+
+        <div class="row">
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mar-b-5">
+                        <div class="icon-box w-100">
+                            <h4>
+                                <a href="{% url '_admin:categories' %}" class="d-b w-100">
+                                <div class="icon"><i class="bx bx-file"></i></div>
+                                Категории</a>
+                            </h4>
+                        </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mar-b-5">
+                        <div class="icon-box w-100">
+                            <h4>
+                                <a href="{% url '_admin:users' %}" class="d-b w-100">
+                                <div class="icon"><i class="bx bx-file"></i></div>
+                                Пользователи</a>
+                            </h4>
+                        </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mar-b-5">
+                        <div class="icon-box w-100">
+                            <h4>
+                                <a href="{% url '_admin:articles' %}" class="d-b w-100">
+                                <div class="icon"><i class="bx bx-file"></i></div>
+                                Статьи</a>
+                            </h4>
+                        </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mar-b-5">
+                        <div class="icon-box w-100">
+                            <h4>
+                                <a href="{% url '_admin:comments' %}" class="d-b w-100">
+                                <div class="icon"><i class="bx bx-file"></i></div>
+                                Комментарии</a>
+                            </h4>
+                        </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mar-b-5">
+                        <div class="icon-box w-100">
+                            <h4>
+                                <a href="{% url '_admin:news' %}" class="d-b w-100">
+                                <div class="icon"><i class="bx bx-file"></i></div>
+                                Новости</a>
+                            </h4>
+                        </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 d-flex align-items-stretch mar-b-5">
+                        <div class="icon-box w-100">
+                            <h4>
+                                <a href="{% url '_admin:moder' %}" class="d-b w-100">
+                                <div class="icon"><i class="bx bx-file"></i></div>
+                                Модерация</a>
+                            </h4>
+                        </div>
+                </div>
+
+        </div>
+
+      </div>
+    </section>
+{% endblock content %}

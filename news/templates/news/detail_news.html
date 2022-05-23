@@ -1,0 +1,81 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<!--<link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+         <!-- ======= Blog Single Section ======= -->
+  {% autoescape off %}
+  <section id="blog" class="blog">
+    <div class="container" data-aos="fade-up">
+
+      <div class="row">
+
+        <div class="col-lg-12 entries">
+
+          <article class="entry entry-single">
+
+            <div class="entry-img">
+                {% if detail_view.image %}
+                    <img src="{{ detail_view.image.url }}" alt="" class="img-fluid" width="100%">
+                {% endif %}
+            </div>
+
+            <h2 class="entry-title">
+              <a href="#"> {{ detail_view.title}}</a>
+            </h2>
+
+            <div class="entry-meta">
+              <ul>
+                <li class="d-flex align-items-center">
+                    <i class="bi bi-person"></i>
+                    <a href="{% url 'auth:profile' detail_view.author.pk %}">{{ detail_view.author }}</a>
+                </li>
+                <li class="d-flex align-items-center">
+                    <i class="bi bi-clock"></i>
+                    <a href="#">{{ detail_view.date }}</a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="entry-content">
+                <blockquote>
+                <p>
+                  {{ detail_view.anons }}
+                </p>
+                </blockquote>
+                <p>
+                    {{ detail_view.full_text }}
+                </p>
+
+            </div>
+
+            <div class="entry-footer">
+                <i class="bi bi-bookmark-check"></i>
+                  <ul class="cats">
+                    <li><a href="/index">Product in Python band</a></li>
+                  </ul>
+                {% if user.is_authenticated %}
+                    {% if not user.role == 'U' or user.is_superuser %}
+                    <div class="entry-footer row">
+                        <div>Для администраторов:</div>
+                    <div>
+                        <a href="{% url '_admin:news_update' detail_view.pk %}">Редактировать</a></div>
+                    <div><a href="{% url '_admin:news_delete' detail_view.pk %}">Удалить</a></div>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+          </article><!-- End blog entry -->
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endautoescape %}
+{% endblock content %}

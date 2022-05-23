@@ -1,0 +1,83 @@
+<div>
+    <h4>Комментариев: {{ article.comments_articles.all.count }}</h4>
+
+    {% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div>
+        {% for item in article.comments_articles.all %}
+        {% if item.is_active %}
+        <div class="row shadow" style="border-radius:5px; margin:0 0 20px 40px; background-color:#f3f4f5">
+            <div class="col-sm-3">
+                <i class="bi bi-person"></i><a href="{% url 'auth:profile' item.comment_author.pk %}" target="_blank">{{ item.comment_author }}</a>
+            </div>
+            <div class="col-sm-3">
+                <i class="bi bi-clock"></i>{{ item.comment_create }}
+            </div>
+            <hr/>
+            <div class="col-sm-12 overflow-hidden" style="padding:5px 10px 20px 50px; min-height:50px">
+                {{ item.comment_text }}
+            </div>
+            {% if request.user.is_authenticated and request.user.role != 'U' %}
+            <div class="row">
+                <div class="col-sm-3 d-flex align-items-end" style="margin-bottom:10px">Для администраторов:</div>
+                {% if request.user.role == 'A' or request.user.is_superuser %}
+                <div class="col-sm-2">
+                    <a href="{% url '_admin:comment_update' item.pk %}"
+                       class="btn btn-outline-secondary btn-block align-items-start d-b h-100 w-100">Редактировать</a>
+                </div>
+                {% endif %}
+                <div class="col-sm-2">
+                    <form method="POST" action="{% url '_admin:comment_delete' item.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit"
+                               value="{% if article.status != 'DT' %} Удалить {% else %} Восстановить {% endif %}">
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <hr>
+    {% if user.is_authenticated %}
+        {% if not user.check_block %}
+        <p>Добавить комментарий</p>
+
+        <div class="col-4">
+
+            <form action="" id="add_form" method="post">
+                {% csrf_token %}
+                {#{ form.as_p }#}
+                {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    <div class="w-100">{{ field }}</div>
+                </div>
+                {% endfor %}
+            </form>
+            <div class="col-sm-6">
+                <input class=" btn btn-secondary btn-block w-100" style="background-color: #e96b56; border-color: #e96b56;"
+                   form="add_form" type="submit" value="Добавить"/>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <p>Вы не можете оставлять комментарии, так как заблокированы до {{ user.is_block }}</p>
+        </div>
+        {% endif %}
+
+    {% else %}
+    <div class="col-5">
+        <p>Чтобы добавить комментарий войдите или зарегистрируйтесь</p>
+    </div>
+    {% endif %}
+    <br>
+</div>

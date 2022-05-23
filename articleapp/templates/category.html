@@ -1,0 +1,78 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+        <h4>
+            Статьи в категории: {{ category.name }} - {{ article_list|length }}
+            шт.
+        </h4>
+      </div>
+</section>
+<div id="blog" class="blog">
+<div class="container" data-aos="fade-up">
+    <div class="row">        
+        {% for article in article_list %}
+            <article class="entry">
+
+                <div class="entry-img">
+                    <img src="{{ article.image }}" alt="" class="img-fluid" width="100%">
+                </div>
+
+                <h2 class="entry-title">
+                    <a href="{% url 'article:detail' article.pk %}">
+                        {{ article.title }}
+                    </a>
+                </h2>
+
+                <h5>
+                    <span>Категория: {{ article.category }}</span>
+                </h5>
+
+                <div class="entry-meta">
+                    <ul>
+                        <li class="d-flex align-items-center"><i class="bi bi-person"></i>
+                            <span>Автор:
+
+                                <a href="{% url 'auth:profile' article.author.pk %}"
+				                           target="_blank"
+                                   style="color: dodgerblue"
+                                   class="">
+
+                                    {{ article.author }}
+                                </a>
+                            </span>
+                        </li>
+
+                        <li class="d-flex align-items-center"><i class="bi bi-clock"></i>
+                            <a>{{ article.publication_date }}</a></li>
+                        <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i>
+                            <a>Комментариев: {{article.comments_articles.all.count }}</a>
+                        </li>
+                        <li class="d-flex align-items-center"><i class="bi bi-bar-chart"></i> <a
+                                 href="{% url 'article:detail' article.pk %}">Рейтинг: {{ article.rating }}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="entry-content">
+                    <div class="read-more">
+                        <a href="{% url 'article:detail' article.pk %}">Читать далее</a>
+                    </div>
+                </div>
+              
+            </article>
+        {% endfor %}
+        {% include 'adminapp/includes/pagination.html' %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

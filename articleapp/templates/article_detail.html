@@ -1,0 +1,109 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<section id="blog" class="blog">
+    <div class="container">
+        <div class="article-edit-form">   
+
+            <div class="post-entry">
+                <h2>{{ article.title }}</h2>
+                <p>
+                    <i class="bi bi-person"></i>
+                    <a href="{% url 'auth:profile' article.author.pk %}" target="_blank">{{ article.author }}</a>
+                </p>
+                <p>
+                    <i class="bi bi-clock"></i>
+                    {% if article.status == 'PB' and article.approve %}
+                    <a>{{ article.publication_date }}</a>
+                    {% else %}
+                        {% if not article.updated == '' %}
+                        <a>{{ article.updated }}</a>
+                        {% else %}
+                        <a>{{ article.created }}</a>
+                        {% endif %}
+                    {% endif %}
+                </p>
+                <p>
+                    <i class="bi bi-bar-chart"></i>
+                    Рейтинг: {{ rating }}
+                </p>
+                <p>{{ article.category }}</p>
+                <p>{{ article.content | safe }}</p>
+                {#<p>{{ article.image }}</p>#}
+            </div>
+            {% if request.user == article.author and not request.user.check_block %}
+            <div class="row">
+                <div class="col-sm-2 d-flex justify-content-center">
+                    <a class=" btn btn-secondary btn-block w-100" style="background-color: #e96b56; border-color: #e96b56;"
+                       href="{% url 'article:edit' article.pk %}">Редактировать</a>
+                </div>
+                {% if article.status != 'DT'%}
+                <div class="col-sm-2 d-flex justify-content-center">
+                    <a class="btn btn-secondary btn-block w-100" style="background-color: #e96b56; border-color: #e96b56;"
+                       href="{% url 'article:delete' article.pk %}">Удалить</a>
+                </div>
+                {% endif %}
+                {% if article.status == 'DF' %}
+                <div class="col-sm-2 d-flex align-items-center ">
+                    <form method="POST" class="w-100 mar-b-5" action="{% url 'article:public' article.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-secondary btn-block w-100 d-flex justify-content-center" type="submit"
+                            style="background-color: #e96b56; border-color: #e96b56;" value="Опубликовать">
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            <hr/>
+            {% if request.user.is_authenticated and request.user.role != 'U' %}
+            <div class="row">
+                <div class="col-sm-2 d-flex align-items-end" style="margin-bottom:10px">Для администраторов:</div>
+                {% if request.user.role == 'A' or request.user.is_superuser %}
+                <div class="col-sm-2">
+                    <a href="{% url '_admin:article_update' article.pk %}"
+                       class="btn btn-outline-secondary btn-block align-items-start d-b h-100 w-100">Редактировать</a>
+                </div>
+                {% endif %}
+                <div class="col-sm-2">
+                    <form method="POST" action="{% url '_admin:article_delete' article.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit"
+                               value="{% if article.status != 'DT' %} Удалить {% else %} restore {% endif %}">
+                    </form>
+                </div>
+            </div>
+            <hr/>
+            {% endif %}
+            <div class="d-flex row div_like" style="margin-top: 10px; margin-bottom: 10px;">
+                {% if not request.user.check_block and request.user.is_authenticated %}
+                <div class="col-sm-12">
+                    <form action="{% url 'article:like-art' article.pk %}" method="POST" class="like-form"
+                            id="{{article.pk}}">
+                        {% csrf_token %}
+                        <input type="hidden" name="article_id" value="{{article.pk}}">
+                        <button type="submit" class="btn btn-success btn-sm like-btn{{article.pk}}">
+                        {% if user not in article.liked.all %}Нравится{% else %}Не нравится{% endif %}
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+                <br>
+                <div class="col-sm-12">
+                    <div class="fa fa-thumbs-up like-count{{article.pk}}" style="font-size: 21px; margin-top: 5px;">
+                         {{ article.liked.all.count }}
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {% include "include_comments.html" %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{%block js%}
+<script src="{% static 'assets/js/like.js' %}"></script>
+{%endblock%}

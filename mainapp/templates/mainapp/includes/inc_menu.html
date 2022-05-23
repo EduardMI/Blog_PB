@@ -1,0 +1,48 @@
+{% load static %}
+
+<header id="header" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="logo">
+            <h1><a href="{% url 'article:main' %}">Habr</a></h1>
+        </div>
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a href="{% url 'news:main' %}">Новости</a></li>
+                {% for category in categories %}
+                <li><a href="{% url 'article:article_category' category.pk %}">{{ category }}</a></li>
+                {% endfor %}
+                <form class="form-inline my-2 my-lg-0 d-flex align-items-center"
+                        method="POST" style="margin-left: 30px;" action="{% url 'search:search' %}">
+                    {% csrf_token %}
+                    <button class="btn  my-2 my-sm-0" name="searched" style="color: #6c757d;">
+                      <span class="fa fa-search form-control-feedback"></span>
+                  </button>
+                </form>
+                <li class="dropdown">
+                    {% if user.is_authenticated %}
+                    <a href="#">{{ user.username }}</a>
+                    {% else %}
+                    <a href="#">Войти</a>
+                    {% endif %}
+                   <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'auth:profile' user.pk %}">Профиль</a></li>
+                            {% if not user.role == 'U' or user.is_superuser %}
+                                <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'article:list' %}">Все мои статьи</a></li>
+                            {% if not user.check_block %}
+                            <li><a href="{% url 'article:add' %}">Добавить статью</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'auth:logout' %}">Выйти</a></li>
+                        {% else %}
+                            <li><a href="{% url 'auth:login' %}">Войти</a></li>
+                            <li><a href="{% url 'auth:register' %}">Регистрация</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+    </div>
+</header><!-- End Header -->

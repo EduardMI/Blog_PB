@@ -1,0 +1,18 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+    <link href="{% static 'notificationapp/css/notify_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<div class="container items-wrapper overflow-auto h-auto">
+    {% for item in notify %}
+        {% include 'notificationapp/includes/notify_list.html' %}
+    {% endfor %}
+
+    {% include 'notificationapp/includes/pagination.html' %}
+
+</div>
+{% endblock content %}

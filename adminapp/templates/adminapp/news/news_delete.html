@@ -1,0 +1,44 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/">Главная</a></li>
+          <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+          <li><a href="{% url '_admin:news' %}">Новости</a></li>
+            <li>Удаление</li>
+        </ol>
+        <h2>Удаление</h2>
+
+      </div>
+</section>
+<div class="container items-wrapper overflow-auto h-auto">
+    <div class="item-block shadow row justify-content-center">
+        <div class="col-sm-4 align-self-center">
+            Вы точно хотите
+            {% if news_to_delete.status != 'DT' %} удалить {% else %} восстановить {% endif %}
+            статью "{{ news_delete.title }}" ?
+        </div>
+        <div class="col-sm-1 align-self-center">
+            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-outline-secondary"
+                       value="{% if news_to_delete.status != 'DT' %} Удалить {% else %} Восстановить {% endif %}">
+            </form>
+        </div>
+        <div class="col-sm-3 align-self-center">
+            <a href="{% url '_admin:news' %}" class="btn btn-outline-secondary">
+                К списку новостей
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

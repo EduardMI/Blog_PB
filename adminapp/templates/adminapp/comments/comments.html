@@ -1,0 +1,65 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="/">Главная</a></li>
+          <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+          <li>Комментарии</li>
+        </ol>
+        <h2>Комментарии</h2>
+
+      </div>
+</section>
+
+<div class="container items-wrapper overflow-auto h-auto">
+    <div class="row">
+        {% if request.user.role == 'A' or request.user.is_superuser %}
+        <div class="col-sm-12 d-flex justify-content-end ">
+            <a href="{% url '_admin:comment_create' %}" class="btn btn-outline-secondary m-b20-r10">
+                Создать комментарий
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% for comment in objects %}
+        <div class="item-block shadow row {% if not comment.is_active %} is-deleted {% endif %}">
+
+            <div class="col-sm-10 row">
+                <div class="col-sm-1">{{ forloop.counter }}</div>
+                <div class="col-sm-2"><a href="{% url 'auth:profile' comment.comment_author.pk %}">
+                    {{ comment.comment_author }}</a></div>
+                <div class="col-sm-9"><a href="{% url 'article:detail' comment.comment_article.pk %}">
+                    {{ comment.comment_article }}</a></div>
+                <div class="w-100 d-none d-md-block"></div>
+                <div class="col-sm-12 overflow-hidden" style="min-height: 60px">
+                    <span>Текст: {{ comment.comment_text }}</span></div>
+            </div>
+
+            <div class="col-sm-2 row-cols-2">
+                {% if request.user.role == 'A' or request.user.is_superuser %}
+                    <div class="col-sm-12 mar-b-5">
+                        <a href="{% url '_admin:comment_update' comment.pk %}"
+                            class="btn btn-outline-secondary btn-block align-items-start d-b">Редактировать</a>
+                    </div>
+                {% endif %}
+                <div class="col-sm-12">
+                    <form method="POST" action="{% url '_admin:comment_delete' comment.pk %}">
+                        {% csrf_token %}
+                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                               type="submit" value="{% if comment.is_active %}del {% else %} restore {% endif %}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% include 'adminapp/includes/pagination.html' %}
+</div>
+{% endblock content %}

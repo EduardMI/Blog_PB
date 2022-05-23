@@ -1,0 +1,15 @@
+.is-read {
+    opacity: 0.5;
+    background-color: #d1d5de;
+}
+
+.notify {
+    display: block;
+    background-color: #dd7882;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}

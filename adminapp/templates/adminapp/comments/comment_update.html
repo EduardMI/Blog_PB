@@ -1,0 +1,48 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+
+        <ol>
+            <li><a href="/">Главная</a></li>
+            <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+            <li><a href="{% url '_admin:comments' %}">Комментарии</a></li>
+            <li>Редактирование</li>
+        </ol>
+        <h2>Редактирование</h2>
+
+    </div>
+</section>
+<div class="container items-wrapper overflow-auto h-auto">
+    <div class="row">
+        <div class="col-sm-12 d-flex justify-content-end ">
+            <a href="{% url '_admin:comments' %}" class="btn btn-outline-secondary m-b20-r10">
+                К списку комментариев
+            </a>
+            <a href="{% url '_admin:comment_create' %}" class="btn btn-outline-secondary m-b20-r10">
+                Создать комментарий
+            </a>
+        </div>
+    </div>
+    <div class="container items-wrapper overflow-auto h-auto">
+        <div class="item-block shadow row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-9">
+                <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input class="btn btn-outline-secondary" type="submit" value="Сохранить">
+                </form>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

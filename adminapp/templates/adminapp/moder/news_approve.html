@@ -1,0 +1,77 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block content %}
+{% autoescape off %}
+<section id="blog" class="blog">
+    <div class="container" data-aos="fade-up">
+
+        <div class="row">
+
+            <div class="col-lg-12 entries">
+
+                <article class="entry entry-single">
+
+                    <div class="entry-img">
+                        {% if news.image %}
+                        <img src="{{ news.image.url }}" alt="" class="img-fluid" width="100%">
+                        {% endif %}
+                    </div>
+
+                    <h2 class="entry-title"><a href="#"> {{ news.title}}</a></h2>
+
+                    <div class="entry-meta">
+                        <ul>
+                            <li class="d-flex align-items-center">
+                                <i class="bi bi-person"></i>
+                                <a href="#">{{ news.author }}</a>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <i class="bi bi-clock"></i>
+                                <a href="#">{{ news.date }}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="entry-content">
+                        <blockquote>
+                            <p>{{ news.anons }}</p>
+                        </blockquote>
+                        <p>{{ news.full_text }}</p>
+                    </div>
+
+                    <div class="row align-items-end">
+                        <div class="col-sm-2">
+                            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    {{ form.as_p }}
+                                    <input class="btn btn-outline-secondary" type="submit" value="Опубликовать">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <form method="get" action="{% url '_admin:news_update' news.pk %}">
+                                {% csrf_token %}
+                                <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                                       type="submit" value="Редактировать">
+                            </form>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <form method="POST" action="{% url '_admin:news_delete' news.pk %}">
+                                {% csrf_token %}
+                                <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                                       type="submit"
+                                       value="{% if article.status != 'DT' %} Удалить {% else %} restore {% endif %}">
+                            </form>
+                        </div>
+                    </div>
+                </article><!-- End blog entry -->
+            </div>
+        </div>
+    </div>
+</section>
+{% endautoescape %}
+{% endblock content %}

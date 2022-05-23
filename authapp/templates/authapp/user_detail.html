@@ -1,0 +1,248 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+<link href="{% static 'authapp/css/profile_style.css' %}" rel="stylesheet">
+<link href="{% static 'notificationapp/css/notify_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+
+<div class="container items-wrapper overflow-auto h-auto">
+    <div class="row d-flex justify-content-around">
+        <div class="col-sm-4 shadow" style="min-height:500px">
+                    {% if object.avatar %}
+                    <div class="col-sm-12 d-flex justify-content-center" style="margin: 20px 0">
+                        <div class="avatar" style="background-image:url({{ object.avatar.url }})"></div>
+                    </div>
+                    {% endif %}
+                    <div class="col-sm-12 d-flex justify-content-center"><h4>{{ object }}</h4></div>
+                    <div class="row">
+                        <div class="col-sm-5 mar-b-5">Статус</div>
+                        <div class="col-sm-7 mar-b-5">{{ object.get_role_display }}</div>
+                        {% if rating %}
+                        <div class="col-sm-5 mar-b-5">Рейтинг</div>
+                        <div class="col-sm-7 mar-b-5">{{ rating }} HABR-point</div>
+                        {% endif %}
+                        <div class="col-sm-5 mar-b-5">Зарегистрирован</div>
+                        <div class="col-sm-7 mar-b-5">{{ object.date_joined|date:"d-M-Y" }}</div>
+                        <div class="col-sm-12 overflow-hidden mar-b-5"><p>{{object.habrprofile.tagline}}</p></div>
+                        {% if request.user == object or request.user.role != 'U' or request.user.is_superuser %}
+                        {% if object.check_block %}
+                        <div class="col-sm-5">Заблокирован до</div>
+                        <div class="col-sm-7">{{ object.is_block }}</div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+
+                {% if request.user == object %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-outline-secondary btn-block w-100 mar-b-5"
+                            href="{% url 'auth:edit' user.pk %}">Редактировать профиль</a>
+                    </div>
+                    <div class="col-sm-12">
+                        <a class="btn btn-outline-secondary btn-block w-100 mar-b-5"
+                           href="{% url 'auth:change_pass' %}">Сменить пароль</a>
+                    </div>
+                </div>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                {% if request.user.role != 'U' or request.user.is_superuser %}
+                <div class="row border border-3">
+                    <div class="col-sm-12 d-flex justify-content-center"><p>Для администраторов:</p></div>
+                    {% if request.user.role == 'A'%}
+                    <div class="col-sm-12  d-flex justify-content-center">
+                        <a class="btn btn-outline-secondary btn-block w-100 mar-b-5"
+                           href="{% url '_admin:user_update' user.pk %}">Редактировать</a>
+                    </div>
+                    {% endif %}
+                    <div class="col-sm-12 d-flex justify-align-center">
+                        <form method="POST" class="w-100 mar-b-5" action="{% url '_admin:user_block' object.pk %}">
+                            {% csrf_token %}
+                            <input class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                                   type="submit"
+                                   value="{% if not object.check_block %}Блокировать{% else %}Снять блокировку{% endif %}">
+                        </form>
+                    </div>
+                    <div class="col-sm-12  d-flex justify-content-center">
+                        <a class="btn btn-outline-secondary btn-block w-100 mar-b-5"
+                           href="{% url '_admin:user_delete' user.pk %}">Удалить</a>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+            </div>
+        <div class="col-sm-7">
+                <div class="row">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if request.user != object %}active{% endif %}e"
+                                    style="color: #e96b56" id="public-tab" data-bs-toggle="tab"
+                                    data-bs-target="#public" type="button" role="tab" aria-controls="home"
+                                    aria-selected="true">Публикации</button>
+                        </li>
+                        {% if request.user == object %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" style="color: #e96b56" id="moder-tab" data-bs-toggle="tab"
+                                    data-bs-target="#moder" type="button" role="tab" aria-controls="moder"
+                                    aria-selected="false">На модерации</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" style="color: #e96b56" id="draft-tab" data-bs-toggle="tab"
+                                    data-bs-target="#draft" type="button" role="tab" aria-controls="draft"
+                                    aria-selected="false">Черновики</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if request.user == object %}active{% endif %}"
+                                    style="color: #e96b56; position: relative;" id="notify-tab" data-bs-toggle="tab"
+                                    data-bs-target="#notify" type="button" role="tab" aria-controls="notify"
+                                    aria-selected="false">Уведомления</button>
+                        </li>
+                        {% endif %}
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content shadow" style="min-height:500px">
+                        <div class="tab-pane {% if request.user != object %}active{% endif %}"
+                             id="public" role="tabpanel" aria-labelledby="public-tab">
+                            {% if articles_public %}
+                            <div class="row" style="margin: 10px">
+                                {% for item in articles_public %}
+                                <div class="w-100" style="">
+                                    <div class="col-sm-12 overflow-hidden" style=""><h3>{{ item }}</h3></div>
+                                    <div class="row">
+                                        <div class="col-sm-4 d-flex align-items-center"><i class="bi bi-clock"></i>
+                                            {{ item.publication_date }}
+                                        </div>
+                                        <div class="col-sm-1 d-flex align-items-center"><i class="bi bi-chat-dots"></i>
+                                            {{ item.comments_articles.all.count }}
+                                        </div>
+                                        <div class="col-sm-1 d-flex align-items-center"><i
+                                                class="bi bi-hand-thumbs-up"></i>
+                                            {{ item.liked.all.count }}
+                                        </div>
+                                        <div class="col-sm-3 d-flex align-items-center ">
+                                            <a class="btn btn-secondary w-100"
+                                               style="background-color: #e96b56; border-color: #e96b56;"
+                                               href="{% url 'article:detail' item.pk %}">Читать</a>
+                                        </div>
+                                        <div class="col-sm-3 d-flex align-items-center ">
+                                            <a class="btn btn-secondary w-100"
+                                               style="background-color: #e96b56; border-color: #e96b56;"
+                                               href="{% url 'article:edit' item.pk %}">Редактировать</a>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="d-flex justify-content-center">
+                                <h5 style="margin:20px auto">Опубликованных статей нет</h5>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if request.user == object %}
+                        <div class="tab-pane" id="moder" role="tabpanel" aria-labelledby="moder-tab">
+                            {% if articles_moder %}
+                            <div class="row" style="margin: 10px">
+                                {% for item in articles_moder %}
+                                <div class="w-100" style="">
+                                    <div class="col-sm-12 overflow-hidden" style=""><h3>{{ item }}</h3></div>
+                                    <div class="row">
+                                        <div class="col-sm-4 d-flex align-items-center">
+                                            <i class="bi bi-clock"></i>
+                                            {{ item.created }}
+                                        </div>
+                                        <div class="col-sm-1 d-flex align-items-center">
+                                            <i class="bi bi-chat-dots"></i>{{ item.comments_articles.all.count }}
+                                        </div>
+                                        <div class="col-sm-1 d-flex align-items-center">
+                                            <i class="bi bi-hand-thumbs-up"></i>{{ item.liked.all.count }}
+                                        </div>
+                                        <div class="col-sm-3 d-flex align-items-center ">
+                                            <a class="btn btn-secondary w-100"
+                                               style="background-color: #e96b56; border-color: #e96b56;"
+                                               href="{% url 'article:detail' item.pk %}">Читать</a>
+                                        </div>
+                                        <div class="col-sm-3 d-flex align-items-center ">
+                                            <a class="btn btn-secondary w-100"
+                                               style="background-color: #e96b56; border-color: #e96b56;"
+                                               href="{% url 'article:edit' item.pk %}">Редактировать</a>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="d-flex justify-content-center">
+                                <h5 style="margin:20px auto">Статей проходящих модерацию нет</h5>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane" id="draft" role="tabpanel" aria-labelledby="draft-tab">
+                            {% if articles_draft %}
+                            <div class="row" style="margin: 10px">
+                                {% for item in articles_draft %}
+                                <div class="w-100" style="">
+                                    <div class="col-sm-12 overflow-hidden" style=""><h3>{{ item }}</h3></div>
+                                    <div class="row">
+                                        <div class="col-sm-4 d-flex align-items-center">
+                                            <i class="bi bi-clock"></i>
+                                            {{ item.created }}
+                                        </div>
+                                        <div class="col-sm-1 d-flex align-items-center">
+                                            <i class="bi bi-chat-dots"></i>{{ item.comments_articles.all.count }}
+                                        </div>
+                                        <div class="col-sm-1 d-flex align-items-center">
+                                            <i class="bi bi-hand-thumbs-up"></i>{{ item.liked.all.count }}
+                                        </div>
+                                        <div class="col-sm-3 d-flex align-items-center ">
+                                            <a class="btn btn-secondary w-100"
+                                               style="background-color: #e96b56; border-color: #e96b56;"
+                                               href="{% url 'article:detail' item.pk %}">Читать</a>
+                                        </div>
+                                        <div class="col-sm-3 d-flex align-items-center ">
+                                            <form method="POST" class="w-100 mar-b-5"
+                                                  action="{% url 'article:public' item.pk %}">
+                                                {% csrf_token %}
+                                                <input class="btn btn-secondary btn-block w-100 d-flex
+                                                    justify-content-center" type="submit"
+                                                       style="background-color: #e96b56; border-color: #e96b56;"
+                                                      value="Опубликовать">
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="d-flex justify-content-center">
+                                <h5 style="margin:20px auto">В черновиках пусто</h5>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane {% if request.user == object %}active{% endif %}"
+                             id="notify" role="tabpanel" aria-labelledby="notify-tab">
+                            <a class="btn btn-outline-secondary btn-block w-100 d-flex justify-content-center"
+                               style="margin:10px 0 20px 0"
+                               href="{% url 'notify:notify_all' object.pk %}">Все уведомления</a>
+                            {% for item in notify  %}
+                            {% if not item.is_read %}
+                                {% include 'notificationapp/includes/notify_list.html' %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock content %}

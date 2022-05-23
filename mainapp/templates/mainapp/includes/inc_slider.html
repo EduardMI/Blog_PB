@@ -1,0 +1,55 @@
+{% load static %}
+<!-- ======= Блок самых читаемых статей ======= -->
+<section id="hero">
+    <div class="hero-container">
+        <div id="heroCarousel" data-bs-interval="5000" class="carousel slide carousel-fade" data-bs-ride="carousel">
+            <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
+            <div class="carousel-inner" role="listbox">
+                <!-- Slide 1 -->
+
+
+                 <div class="carousel-item" style="background: {% static 'assets/img/slide/slide-1.jpg' %}">
+                        <div class="carousel-container">
+                            <div class="carousel-content">
+                                <h2 class="animate__animated animate__fadeInDown">Создать<span> статью</span></h2>
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'article:add' %}"
+                                   class="btn-get-started animate__animated animate__fadeInUp">Создать</a>
+                                {% else %}
+                                <a href="{% url 'auth:login' %}" class="btn-get-started animate__animated animate__fadeInUp">Войдите или зарегистрируйтесь</a>
+
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item active" style="background: {% static 'assets/img/slide/slide-2.jpg' %}">
+                    <div class="carousel-container">
+                        <div class="carousel-content">
+                            <h2 class="animate__animated fanimate__adeInDown">Поиск <span> статьи</span></h2>
+                            <a href="{% url 'search:search' %}" class="btn-get-started animate__animated animate__fadeInUp">Найти</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="carousel-item" style="background: {% static 'assets/img/slide/slide-3.jpg' %}">
+                    <div class="carousel-container">
+                        <div class="carousel-content">
+                            <h2 class="animate__animated animate__fadeInDown">Образовательный портал <span> Geekbrains</span></h2>
+                            <p class="animate__animated animate__fadeInUp">Реклама нашего партнера</p>
+                            <a href="https://gb.ru/" class="btn-get-started animate__animated animate__fadeInUp">Прочитать больше о
+                                проекте</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#heroCarousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon bi bi-chevron-left" aria-hidden="true"></span>
+            </a>
+            <a class="carousel-control-next" href="#heroCarousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon bi bi-chevron-right" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+</section><!-- End Hero -->

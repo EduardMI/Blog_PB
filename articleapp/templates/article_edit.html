@@ -1,0 +1,19 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <section id="blog" class="blog">
+        <div class="container">
+            <div class="article-edit-form"><h4>Редактировать статью</h4>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {{ form.media | safe }}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Редактировать</button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+

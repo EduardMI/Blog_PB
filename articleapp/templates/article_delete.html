@@ -1,0 +1,12 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1>Удалить статью</h1>
+    <form action="" method="post">{% csrf_token %}
+        <p>Вы уверены, что хотите удалить статью "{{ article.title }}"?</p>
+        {{ form.as_p }}
+        <input type="submit" value="Confirm" />
+    </form>
+{% endblock content %}
+

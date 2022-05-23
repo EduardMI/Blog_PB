@@ -1,0 +1,133 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'adminapp/css/admin_style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block content %}
+<section id="breadcrumbs" class="breadcrumbs">
+    <div class="container">
+
+        <ol>
+            <li><a href="/">Главная</a></li>
+            <li><a href="{% url '_admin:main_admin' %}">Админка</a></li>
+            <li>Модерация</li>
+        </ol>
+        <h2>Модерация</h2>
+
+    </div>
+</section>
+<div class="container items-wrapper overflow-auto h-auto">
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-outline-dark collapsed w-100" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                            aria-expanded="false" aria-controls="collapseOne">
+                        Уведомления о призыве модератора
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    {% if notifications %}
+                        {% for object in notifications %}
+                        <div class="item-block shadow row">
+                            <div class="col-sm-10 row">
+                                <div class="col-sm-3">{{object.created}}</div>
+                                <div class="col-sm-3"><span><a href="{% url '_admin:user_update' object.from_user.pk %}">
+                                    {{object.from_user}}</a></span></div>
+                                <div class="w-100 d-none d-md-block"></div>
+                                <div class="col-sm-12 overflow-auto">{{object.message}}</div>
+                            </div>
+                            <div class="col-sm-2 row">
+                                <div class="col-sm-12">
+                                    <a class="btn btn-outline-secondary btn-block align-items-start d-b"
+                                       href="{% url 'article:detail' object.article_id %}" target="_blank">
+                                        К статье</a></div>
+                                <div class="col-sm-12">
+                                    <form method="POST" action="{% url '_admin:notify_delete' object.pk %}">
+                                        {% csrf_token %}
+                                        <input class="btn btn-outline-secondary btn-block align-items-end d-b w-100"
+                                            type="submit" value="Прочитано">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <h2>Уведомлений нет</h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-outline-dark collapsed w-100" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                            aria-expanded="true" aria-controls="collapseOne">
+                        Статьи на модерации
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    {% for object in articles %}
+                    <div class="item-block shadow row">
+                        <div class="col-sm-12 row">
+                            <div class="col-sm-10"><span>{{ object.title }}</span></div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-outline-secondary btn-block align-items-start d-b"
+                                   href="{% url '_admin:approve_article' object.pk %}">Модерировать</a>
+                            </div>
+                            <div class="w-100 d-none d-md-block"></div>
+                            <div class="col-sm-3"><span>Категория: <p>{{ object.category }}</p></span></div>
+                            <div class="col-sm-3"><span>Автор:
+                                    <p><a href="{% url '_admin:user_update' object.author.pk %}" target="_blank"
+                                          style="color: dodgerblue" class="">{{ object.author }}</a></p></span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header" id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-outline-dark collapsed w-100"
+                            data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                            aria-expanded="false" aria-controls="collapseThree">
+                        Новости на модерации
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                  <div class="card-body">
+                    {% for object in news %}
+                    <div class="item-block shadow row">
+                        <div class="col-sm-12 row">
+                            <div class="col-sm-3">{{ object.created }}</div>
+                            <div class="col-sm-7"><span>{{ object.title }}</span></div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-outline-secondary btn-block align-items-start d-b"
+                                   href="{% url '_admin:approve_news' object.pk %}">Модерировать</a>
+                            </div>
+                            <div class="w-100 d-none d-md-block"></div>
+
+                            <div class="col-sm-3"><span>Автор:
+                                    <p><a href="{% url '_admin:user_update' object.author.pk %}" target="_blank"
+                                          style="color: dodgerblue" class="">{{ object.author }}</a></p></span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

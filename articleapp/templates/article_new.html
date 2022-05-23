@@ -1,0 +1,25 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+    <section id="blog" class="blog">
+        <div class="container">
+            {% if messages %}
+                <div class="alert alert-success">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div class="article-edit-form"><h4>Новая статья</h4>
+                <form action="" method="post">{% csrf_token %}
+                    {{ form.media | safe }}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+
+
